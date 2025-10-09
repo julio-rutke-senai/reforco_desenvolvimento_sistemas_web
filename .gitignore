@@ -1,0 +1,16 @@
+target/
+
+.idea/
+*.iml
+
+# Arquivos e pastas gerados pelo IDE
+.gradle/
+
+# Arquivos compilados (o target Maven já cuida disso, mas pode ser útil para outros cenários)
+*.class
+
+# Arquivos de log
+*.log
+
+# Arquivos de sistema operacional
+.DS_Store
