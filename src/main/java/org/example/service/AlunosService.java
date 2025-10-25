@@ -1,29 +1,34 @@
-package org.example;
-import java.util.*;
-import java.util.concurrent.atomic.AtomicLong;
+package org.example.service;
 
-public class CatalogoAlunos {
-    private final List<Aluno> alunos = new ArrayList<>();
-    private final AtomicLong seq = new AtomicLong(1L);
+import org.example.data.DataBase;
+import org.example.model.Aluno;
+
+import java.util.*;
+
+public class AlunosService extends Service {
+
+    public AlunosService(DataBase dataBase) {
+        super(dataBase);
+    }
 
     public Aluno criar(String nome, String email) {
-        Aluno aluno = new Aluno(seq.getAndIncrement(), nome, email);
-        alunos.add(aluno);
+        Aluno aluno = new Aluno(dataBase.getSeqAluno().getAndIncrement(), nome, email);
+        dataBase.getAlunos().add(aluno);
         return aluno;
     }
 
     public List<Aluno> listar() {
-        return Collections.unmodifiableList(alunos);
+        return Collections.unmodifiableList(dataBase.getAlunos());
     }
 
     public Optional<Aluno> buscarPorId(Long id) {
-        return alunos.stream().filter(a -> Objects.equals(a.getId(), id)).findFirst();
+        return dataBase.getAlunos().stream().filter(a -> Objects.equals(a.getId(), id)).findFirst();
     }
 
     public Optional<Aluno> buscarPorEmail(String email) {
         if (email == null) return Optional.empty();
         String key = email.trim().toLowerCase();
-        return alunos.stream()
+        return dataBase.getAlunos().stream()
                 .filter(a -> a.getEmail() != null && a.getEmail().trim().toLowerCase().equals(key))
                 .findFirst();
     }
@@ -38,6 +43,7 @@ public class CatalogoAlunos {
     }
 
     public boolean remover(Long id) {
-        return alunos.removeIf(a -> Objects.equals(a.getId(), id));
+        return dataBase.getAlunos().removeIf(a -> Objects.equals(a.getId(), id));
     }
+
 }
