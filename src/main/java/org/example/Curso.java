@@ -6,6 +6,11 @@ public class Curso {
     private final String titulo;
     private int cargaHoraria;
 
+    public Curso(){
+        titulo = "Titulo Padrão";
+        cargaHoraria = 0;
+    }
+
     public Curso(String titulo, int cargaHoraria) {
         if (titulo == null || titulo.isBlank()) throw new IllegalArgumentException("titulo vazio");
         if (cargaHoraria <= 0) throw new IllegalArgumentException("cargaHoraria <= 0");
@@ -29,5 +34,9 @@ public class Curso {
         return titulo.equalsIgnoreCase(c.titulo);
     }
     @Override public int hashCode() { return Objects.hash(titulo.toLowerCase()); }
+
+    public void incrementarHoras(int horas) {
+        this.cargaHoraria += horas;
+    }
 }
 
