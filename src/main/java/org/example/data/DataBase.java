@@ -3,11 +3,13 @@ package org.example.data;
 import org.example.model.Aluno;
 import org.example.model.Curso;
 import org.example.model.Matricula;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
 
+@Component
 public class DataBase {
 
     private final List<Curso> cursos = new ArrayList<>();

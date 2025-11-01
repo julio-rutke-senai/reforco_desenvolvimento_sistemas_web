@@ -1,9 +1,9 @@
 package org.example;
 
-import org.example.controller.AlunosController;
-import org.example.controller.CursosController;
-import org.example.controller.MainController;
-import org.example.controller.MatriculasController;
+import org.example.controller.scanner.AlunosController;
+import org.example.controller.scanner.CursosController;
+import org.example.controller.scanner.MainController;
+import org.example.controller.scanner.MatriculasController;
 import org.example.data.DataBase;
 import org.example.service.AlunosService;
 import org.example.service.CursosService;

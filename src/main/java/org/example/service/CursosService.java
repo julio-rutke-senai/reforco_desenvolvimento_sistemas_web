@@ -6,8 +6,10 @@ import org.example.model.Curso;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
+@org.springframework.stereotype.Service
 public class CursosService extends Service {
 
 
@@ -37,4 +39,11 @@ public class CursosService extends Service {
         return dataBase.getCursos().stream().mapToInt(Curso::getCargaHoraria).sum();
     }
 
+    public Optional<Curso> incrementarHoras(String titulo) {
+        List<Curso> lista = listar();
+        Optional<Curso> opt = lista.stream()
+                .filter(c -> c.getTitulo().equalsIgnoreCase(titulo))
+                .findFirst();
+        return opt;
+    }
 }

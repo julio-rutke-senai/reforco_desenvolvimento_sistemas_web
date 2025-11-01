@@ -1,4 +1,4 @@
-package org.example.controller;
+package org.example.controller.scanner;
 
 import org.example.model.Curso;
 import org.example.service.CursosService;
