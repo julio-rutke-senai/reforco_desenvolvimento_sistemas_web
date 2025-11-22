@@ -46,4 +46,8 @@ public class CursosService extends Service {
                 .findFirst();
         return opt;
     }
+
+    public void excluir(String titulo) {
+        dataBase.getCursos().removeIf(curso -> curso.getTitulo().equals(titulo));
+    }
 }

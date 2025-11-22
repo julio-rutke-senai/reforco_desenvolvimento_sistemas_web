@@ -5,6 +5,7 @@ import org.example.model.Aluno;
 
 import java.util.*;
 
+@org.springframework.stereotype.Service
 public class AlunosService extends Service {
 
     public AlunosService(DataBase dataBase) {

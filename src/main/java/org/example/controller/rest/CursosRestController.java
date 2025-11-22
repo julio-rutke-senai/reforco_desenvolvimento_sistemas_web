@@ -74,4 +74,18 @@ public class CursosRestController {
         return ResponseEntity.ok(cargaHoraria);
     }
 
+    @DeleteMapping("/excluir/{codigo}")
+    private ResponseEntity excluir(@RequestParam("titulo") String titulo){
+        try {
+            System.out.println("Excluindo curso "+titulo);
+            cursosService.excluir(titulo);
+
+            return ResponseEntity.ok("Curso excluído.");
+        }catch (Exception e) {
+            System.out.println("Erro: " + e.getMessage());
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+
+    }
+
 }
