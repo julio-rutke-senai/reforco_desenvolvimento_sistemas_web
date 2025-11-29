@@ -1,6 +1,7 @@
 package org.example.service;
 
 import org.example.data.DataBase;
+import org.example.dto.CursoDTOResponse;
 import org.example.model.Aluno;
 import org.example.model.Curso;
 import org.example.model.Matricula;
@@ -60,7 +61,7 @@ public class MatriculasService extends Service {
         return alunosService.buscarPorEmail(email);
     }
 
-    public List<Curso> listarCursos() {
+    public List<CursoDTOResponse> listarCursos() {
         return cursosService.listar();
     }
 }

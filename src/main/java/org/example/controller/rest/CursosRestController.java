@@ -1,10 +1,17 @@
 package org.example.controller.rest;
 
+import org.example.dto.CursoDTORequest;
+import org.example.dto.CursoDTOResponse;
+import org.example.dto.NovoCursoDTOResponse;
+import org.example.exceptions.RegrasNegocioException;
+import org.example.exceptions.ResponseDTOError;
 import org.example.model.Curso;
 import org.example.service.CursosService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,11 +26,18 @@ public class CursosRestController {
     }
 
     @PostMapping("/add")
-    private ResponseEntity adicionarCurso(@RequestBody Curso curso) {
+    private ResponseEntity adicionarCurso(@RequestBody CursoDTORequest curso) {
         try {
-            cursosService.adicionar(curso);
+            NovoCursoDTOResponse response = cursosService.adicionar(curso);
             System.out.println("OK: curso adicionado.");
-            return ResponseEntity.ok().body("Criado");
+            return ResponseEntity.ok().body(response);
+        } catch (RegrasNegocioException e) {
+            System.out.println("Erro: " + e.getMessage());
+            ResponseDTOError error = new ResponseDTOError();
+            error.setTimestamp(LocalDateTime.now());
+            error.setErro(e.getMessage());
+            error.setStatus(409);
+            return ResponseEntity.status(error.getStatus()).body(error);
         } catch (Exception e) {
             System.out.println("Erro: " + e.getMessage());
             return ResponseEntity.badRequest().body(e.getMessage());
@@ -31,8 +45,8 @@ public class CursosRestController {
     }
 
     @GetMapping("/listar")
-    private ResponseEntity<List<Curso>> listarCursos() {
-        List<Curso> lista = cursosService.listar();
+    private ResponseEntity<List<CursoDTOResponse>> listarCursos() {
+        List<CursoDTOResponse> lista = cursosService.listar();
         if (lista.isEmpty()) {
             System.out.println("Sem cursos.");
             return ResponseEntity.noContent().build();
@@ -85,7 +99,15 @@ public class CursosRestController {
             System.out.println("Erro: " + e.getMessage());
             return ResponseEntity.badRequest().body(e.getMessage());
         }
+    }
 
+    @ExceptionHandler(RegrasNegocioException.class)
+    public ResponseEntity handleRegraNegocio(RegrasNegocioException ex){
+        ResponseDTOError error = new ResponseDTOError();
+        error.setTimestamp(LocalDateTime.now());
+        error.setErro(ex.getMessage());
+        error.setStatus(409);
+        return ResponseEntity.status(error.getStatus()).body(error);
     }
 
 }

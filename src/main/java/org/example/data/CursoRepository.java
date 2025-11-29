@@ -1,5 +1,6 @@
 package org.example.data;
 
+import org.example.dto.CursoDTOResponse;
 import org.example.model.Curso;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -16,5 +17,8 @@ public interface CursoRepository extends JpaRepository<Curso, Long> {
     int retornarSomaCargaHoraria();
 
     Curso findByTituloEqualsIgnoreCase(String titulo);
+
+    @Query("select new org.example.dto.CursoDTOResponse(c.id, c.titulo, c.cargaHoraria) from Curso c")
+    List<CursoDTOResponse> retornarDTOCurso();
 
 }
