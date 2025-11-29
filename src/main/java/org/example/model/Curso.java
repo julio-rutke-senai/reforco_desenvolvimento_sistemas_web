@@ -1,8 +1,15 @@
 package org.example.model;
 
+import jakarta.persistence.*;
+
 import java.util.Objects;
 
+@Entity
 public class Curso {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     private final String titulo;
     private int cargaHoraria;
 
@@ -16,6 +23,20 @@ public class Curso {
         if (cargaHoraria <= 0) throw new IllegalArgumentException("cargaHoraria <= 0");
         this.titulo = titulo.trim();
         this.cargaHoraria = cargaHoraria;
+    }
+
+    public Curso(Long id, String titulo, int carga_horaria) {
+        this.titulo = titulo;
+        this.cargaHoraria = carga_horaria;
+        this.id = id;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getTitulo() { return titulo; }

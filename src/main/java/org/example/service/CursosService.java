@@ -1,5 +1,6 @@
 package org.example.service;
 
+import org.example.data.CursoRepository;
 import org.example.data.DataBase;
 import org.example.model.Curso;
 
@@ -10,44 +11,42 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @org.springframework.stereotype.Service
-public class CursosService extends Service {
+public class CursosService{
 
+    private final CursoRepository cursoRepository;
 
-    public CursosService(DataBase dataBase) {
-        super(dataBase);
+    public CursosService(CursoRepository cursoRepository) {
+        this.cursoRepository = cursoRepository;
     }
 
-    public void adicionar(Curso c) {
-        Objects.requireNonNull(c, "curso null");
-        if (dataBase.getCursos().contains(c)) throw new IllegalArgumentException("curso duplicado: " + c.getTitulo());
-        dataBase.getCursos().add(c);
+    public void adicionar(Curso curso) {
+        Objects.requireNonNull(curso, "curso null");
+        cursoRepository.save(curso);
     }
 
     public List<Curso> listar() {
-        return List.copyOf(dataBase.getCursos());
+        return cursoRepository.findAll();
     }
 
     public List<Curso> buscarPorPrefixo(String prefixo) {
-        String p = Objects.requireNonNullElse(prefixo, "").toLowerCase();
-        return dataBase.getCursos().stream()
-                .filter(c -> c.getTitulo().toLowerCase().startsWith(p))
-                .sorted(Comparator.comparing(Curso::getTitulo))
-                .collect(Collectors.toList());
+        List<Curso> byTituloStartingWith = cursoRepository.findByTituloStartingWith(prefixo);
+        return byTituloStartingWith;
     }
 
     public int cargaTotal() {
-        return dataBase.getCursos().stream().mapToInt(Curso::getCargaHoraria).sum();
+        return cursoRepository.retornarSomaCargaHoraria();
     }
 
-    public Optional<Curso> incrementarHoras(String titulo) {
-        List<Curso> lista = listar();
-        Optional<Curso> opt = lista.stream()
-                .filter(c -> c.getTitulo().equalsIgnoreCase(titulo))
-                .findFirst();
-        return opt;
+    public Optional<Curso> incrementarHoras(String titulo, int qtdeHoras) {
+        Curso curso = cursoRepository.findByTituloEqualsIgnoreCase(titulo);
+        curso.incrementarHoras(qtdeHoras);
+
+        cursoRepository.save(curso);
+
+        return Optional.ofNullable(curso);
     }
 
-    public void excluir(String titulo) {
-        dataBase.getCursos().removeIf(curso -> curso.getTitulo().equals(titulo));
+    public void excluir(Long id) {
+        cursoRepository.deleteById(id);
     }
 }

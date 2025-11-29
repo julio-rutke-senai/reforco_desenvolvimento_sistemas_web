@@ -52,7 +52,7 @@ public class CursosRestController {
 
     @PatchMapping("/incrementar-horas")
     private ResponseEntity incrementarHorasCurso(@RequestParam("curso") String titulo, @RequestParam("horas") int horas) {
-        Optional<Curso> opt = cursosService.incrementarHoras(titulo);
+        Optional<Curso> opt = cursosService.incrementarHoras(titulo, horas);
         if (opt.isEmpty()) {
             System.out.println("Curso não encontrado.");
             return ResponseEntity.noContent().build();
@@ -75,10 +75,10 @@ public class CursosRestController {
     }
 
     @DeleteMapping("/excluir/{codigo}")
-    private ResponseEntity excluir(@RequestParam("titulo") String titulo){
+    private ResponseEntity excluir(@PathVariable("codigo") Long codigo){
         try {
-            System.out.println("Excluindo curso "+titulo);
-            cursosService.excluir(titulo);
+            System.out.println("Excluindo curso "+codigo);
+            cursosService.excluir(codigo);
 
             return ResponseEntity.ok("Curso excluído.");
         }catch (Exception e) {
